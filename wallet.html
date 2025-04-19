@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        .page {
+            display: none;
+            flex: 1;
+            padding-bottom: 60px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .wallet-section {
+            padding: 0 20px;
+        }
+        
+        .wallet-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+        
+        .tokens-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+            scrollbar-width: none;
+        }
+        
+        .tokens-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .token-card {
+            min-width: 120px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .token-card:hover {
+            border-color: #2E7D32;
+        }
+        
+        .token-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .token-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .token-logo {
+            width: 24px;
+            height: 24px;
+            background-color: #ddd;
+            border-radius: 50%;
+        }
+        
+        .token-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 15px;
+        }
+        
+        .token-divider {
+            border-top: 1px dashed #ccc;
+            flex-grow: 1;
+            margin: 0 5px;
+            align-self: flex-end;
+        }
+        
+        .token-placeholder {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .token-usd {
+            color: black;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        .token-card:hover .token-usd {
+            color: #4CAF50;
+        }
+        
+        .nft-section {
+            padding: 20px;
+        }
+        
+        .nft-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .nft-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .config-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .nft-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .nft-item {
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: white;
+            aspect-ratio: 16/9;
+            position: relative;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .nft-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .nav-item {
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            color: #888;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-item.active {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Page -->
+    <div class="page home-page active">
+        <!-- Empty home page -->
+    </div>
+    
+    <!-- Wallet Page -->
+    <div class="page wallet-page">
+        <div class="wallet-section">
+            <div class="wallet-title">Your Wallet</div>
+            <div class="tokens-container" id="tokensContainer">
+                <div class="token-card">
+                    <div class="token-header">
+                        <div class="token-name">ICP</div>
+                        <div class="token-logo"></div>
+                    </div>
+                    <div class="token-footer">
+                        <div class="token-placeholder">---</div>
+                        <div class="token-divider"></div>
+                        <div class="token-usd">342$</div>
+                    </div>
+                </div>
+                <div class="token-card">
+                    <div class="token-header">
+                        <div class="token-name">Polygon</div>
+                        <div class="token-logo"></div>
+                    </div>
+                    <div class="token-footer">
+                        <div class="token-placeholder">---</div>
+                        <div class="token-divider"></div>
+                        <div class="token-usd">245$</div>
+                    </div>
+                </div>
+                <div class="token-card">
+                    <div class="token-header">
+                        <div class="token-name">Solana</div>
+                        <div class="token-logo"></div>
+                    </div>
+                    <div class="token-footer">
+                        <div class="token-placeholder">---</div>
+                        <div class="token-divider"></div>
+                        <div class="token-usd">---</div>
+                    </div>
+                </div>
+                <div class="token-card">
+                    <div class="token-header">
+                        <div class="token-name">Bitcoin</div>
+                        <div class="token-logo"></div>
+                    </div>
+                    <div class="token-footer">
+                        <div class="token-placeholder">---</div>
+                        <div class="token-divider"></div>
+                        <div class="token-usd">15,342$</div>
+                    </div>
+                </div>
+                <div class="token-card">
+                    <div class="token-header">
+                        <div class="token-name">Ethereum</div>
+                        <div class="token-logo"></div>
+                    </div>
+                    <div class="token-footer">
+                        <div class="token-placeholder">---</div>
+                        <div class="token-divider"></div>
+                        <div class="token-usd">2,154$</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nft-section">
+            <div class="nft-header">
+                <div class="nft-title">All NFT</div>
+                <button class="config-button">⚙️</button>
+            </div>
+            
+            <div class="nft-container" id="nftContainer">
+                <!-- NFT items will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Other Pages (Add NFT, Alert, Profile) -->
+    <div class="page add-nft-page">
+        <!-- Empty add NFT page -->
+    </div>
+    
+    <div class="page alert-page">
+        <!-- Empty alert page -->
+    </div>
+    
+    <div class="page profile-page">
+        <!-- Empty profile page -->
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="home-page">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" data-page="wallet-page">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </div>
+        <div class="nav-item" data-page="add-nft-page">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add NFT</span>
+        </div>
+        <div class="nav-item" data-page="alert-page">
+            <i class="fas fa-bell"></i>
+            <span>Alert</span>
+        </div>
+        <div class="nav-item" data-page="profile-page">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('.page');
+            const nftContainer = document.getElementById('nftContainer');
+            
+            // Generate sample NFTs (horizontal rectangles)
+            const nftImages = [
+                'icon.png',
+                'icon1.png',
+                'https://i.imgur.com/5Z0QY9W.jpg',
+                'https://i.imgur.com/7Z0QY9W.jpg',
+                'https://i.imgur.com/9Z0QY9W.jpg',
+                'https://i.imgur.com/B1QjY7A.jpg',
+                'https://i.imgur.com/D1QjY7A.jpg',
+                'https://i.imgur.com/F1QjY7A.jpg'
+            ];
+            
+            nftImages.forEach(imgUrl => {
+                const nftItem = document.createElement('div');
+                nftItem.className = 'nft-item';
+                nftItem.innerHTML = `<img src="${imgUrl}" alt="NFT">`;
+                nftContainer.appendChild(nftItem);
+            });
+            
+            // Handle navigation clicks
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected page
+                    pages.forEach(page => page.classList.remove('active'));
+                    document.querySelector(`.${pageId}`).classList.add('active');
+                });
+            });
+            
+            // Horizontal scroll for tokens with mouse wheel
+            const tokensContainer = document.getElementById('tokensContainer');
+            tokensContainer.addEventListener('wheel', function(e) {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    this.scrollLeft += e.deltaY;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
