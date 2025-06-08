@@ -1,361 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT Wallet</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Простой ИИ чат-бот</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
             background-color: #f5f5f5;
         }
-        
-        .page {
-            display: none;
-            flex: 1;
-            padding-bottom: 60px;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        .wallet-section {
-            padding: 0 20px;
-        }
-        
-        .wallet-title {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-            padding-top: 20px;
-        }
-        
-        .tokens-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 10px 0;
-            scrollbar-width: none;
-        }
-        
-        .tokens-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .token-card {
-            min-width: 120px;
-            border: 2px solid #4CAF50;
+        #chat-container {
+            background-color: white;
             border-radius: 10px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .token-card:hover {
-            border-color: #2E7D32;
-        }
-        
-        .token-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .token-name {
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .token-logo {
-            width: 24px;
-            height: 24px;
-            background-color: #ddd;
-            border-radius: 50%;
-        }
-        
-        .token-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 15px;
-        }
-        
-        .token-divider {
-            border-top: 1px dashed #ccc;
-            flex-grow: 1;
-            margin: 0 5px;
-            align-self: flex-end;
-        }
-        
-        .token-placeholder {
-            color: #888;
-            font-size: 14px;
-        }
-        
-        .token-usd {
-            color: black;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        
-        .token-card:hover .token-usd {
-            color: #4CAF50;
-        }
-        
-        .nft-section {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 20px;
-        }
-        
-        .nft-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
+            height: 400px;
+            overflow-y: auto;
         }
-        
-        .nft-title {
-            font-size: 20px;
-            font-weight: bold;
+        .user-message {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            margin-left: auto;
         }
-        
-        .config-button {
-            background: none;
+        .bot-message {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        #input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            font-size: 20px;
+            border-radius: 5px;
             cursor: pointer;
         }
-        
-        .nft-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        
-        .nft-item {
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: white;
-            aspect-ratio: 16/9;
-            position: relative;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .nft-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            background-color: white;
-            border-top: 1px solid #ddd;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        
-        .nav-item {
-            text-align: center;
-            padding: 5px;
-            cursor: pointer;
-            color: #888;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        
-        .nav-item.active {
-            color: black;
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <!-- Home Page -->
-    <div class="page home-page active">
-        <!-- Empty home page -->
+    <h1>Простой ИИ чат-бот</h1>
+    <div id="chat-container"></div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Введите ваше сообщение..." autofocus>
+        <button onclick="sendMessage()">Отправить</button>
     </div>
-    
-    <!-- Wallet Page -->
-    <div class="page wallet-page">
-        <div class="wallet-section">
-            <div class="wallet-title">Your Wallet</div>
-            <div class="tokens-container" id="tokensContainer">
-                <div class="token-card">
-                    <div class="token-header">
-                        <div class="token-name">ICP</div>
-                        <div class="token-logo"></div>
-                    </div>
-                    <div class="token-footer">
-                        <div class="token-placeholder">---</div>
-                        <div class="token-divider"></div>
-                        <div class="token-usd">342$</div>
-                    </div>
-                </div>
-                <div class="token-card">
-                    <div class="token-header">
-                        <div class="token-name">Polygon</div>
-                        <div class="token-logo"></div>
-                    </div>
-                    <div class="token-footer">
-                        <div class="token-placeholder">---</div>
-                        <div class="token-divider"></div>
-                        <div class="token-usd">245$</div>
-                    </div>
-                </div>
-                <div class="token-card">
-                    <div class="token-header">
-                        <div class="token-name">Solana</div>
-                        <div class="token-logo"></div>
-                    </div>
-                    <div class="token-footer">
-                        <div class="token-placeholder">---</div>
-                        <div class="token-divider"></div>
-                        <div class="token-usd">---</div>
-                    </div>
-                </div>
-                <div class="token-card">
-                    <div class="token-header">
-                        <div class="token-name">Bitcoin</div>
-                        <div class="token-logo"></div>
-                    </div>
-                    <div class="token-footer">
-                        <div class="token-placeholder">---</div>
-                        <div class="token-divider"></div>
-                        <div class="token-usd">15,342$</div>
-                    </div>
-                </div>
-                <div class="token-card">
-                    <div class="token-header">
-                        <div class="token-name">Ethereum</div>
-                        <div class="token-logo"></div>
-                    </div>
-                    <div class="token-footer">
-                        <div class="token-placeholder">---</div>
-                        <div class="token-divider"></div>
-                        <div class="token-usd">2,154$</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="nft-section">
-            <div class="nft-header">
-                <div class="nft-title">All NFT</div>
-                <button class="config-button">⚙️</button>
-            </div>
-            
-            <div class="nft-container" id="nftContainer">
-                <!-- NFT items will be loaded here -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Other Pages (Add NFT, Alert, Profile) -->
-    <div class="page add-nft-page">
-        <!-- Empty add NFT page -->
-    </div>
-    
-    <div class="page alert-page">
-        <!-- Empty alert page -->
-    </div>
-    
-    <div class="page profile-page">
-        <!-- Empty profile page -->
-    </div>
-    
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item active" data-page="home-page">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </div>
-        <div class="nav-item" data-page="wallet-page">
-            <i class="fas fa-wallet"></i>
-            <span>Wallet</span>
-        </div>
-        <div class="nav-item" data-page="add-nft-page">
-            <i class="fas fa-plus-circle"></i>
-            <span>Add NFT</span>
-        </div>
-        <div class="nav-item" data-page="alert-page">
-            <i class="fas fa-bell"></i>
-            <span>Alert</span>
-        </div>
-        <div class="nav-item" data-page="profile-page">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </div>
-    </div>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navItems = document.querySelectorAll('.nav-item');
-            const pages = document.querySelectorAll('.page');
-            const nftContainer = document.getElementById('nftContainer');
+        // База знаний для бота
+        const knowledgeBase = {
+            "привет": ["Привет!", "Здравствуйте!", "Привет, как дела?"],
+            "как дела": ["Отлично, спасибо!", "Хорошо, а у тебя?", "Лучше всех!"],
+            "что ты умеешь": ["Я могу отвечать на простые вопросы.", "Я маленький ИИ, который учится общаться.", "Пока я знаю немного, но постоянно учусь!"],
+            "пока": ["До свидания!", "Пока! Возвращайся скорее!", "Было приятно пообщаться!"],
+            "спасибо": ["Пожалуйста!", "Не за что!", "Всегда рад помочь!"],
+            "как тебя зовут": ["Меня зовут Ботти.", "Я простой чат-бот.", "У меня нет имени, но ты можешь придумать мне его!"],
+            "что такое ии": ["ИИ (Искусственный Интеллект) - это способность машин имитировать человеческий интеллект.", "Это программы, которые могут решать задачи, обычно требующие человеческого мышления."],
+            "кто тебя создал": ["Меня создал разработчик, используя HTML и JavaScript.", "Я был написан как пример простого ИИ."],
+            "default": ["Извините, я не понял ваш вопрос.", "Можете переформулировать?", "Я еще учусь и не знаю ответа на этот вопрос."]
+        };
+
+        // Функция для получения ответа от бота
+        function getBotResponse(userMessage) {
+            userMessage = userMessage.toLowerCase().trim();
             
-            // Generate sample NFTs (horizontal rectangles)
-            const nftImages = [
-                'icon.png',
-                'icon1.png',
-                'https://i.imgur.com/5Z0QY9W.jpg',
-                'https://i.imgur.com/7Z0QY9W.jpg',
-                'https://i.imgur.com/9Z0QY9W.jpg',
-                'https://i.imgur.com/B1QjY7A.jpg',
-                'https://i.imgur.com/D1QjY7A.jpg',
-                'https://i.imgur.com/F1QjY7A.jpg'
-            ];
-            
-            nftImages.forEach(imgUrl => {
-                const nftItem = document.createElement('div');
-                nftItem.className = 'nft-item';
-                nftItem.innerHTML = `<img src="${imgUrl}" alt="NFT">`;
-                nftContainer.appendChild(nftItem);
-            });
-            
-            // Handle navigation clicks
-            navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const pageId = this.getAttribute('data-page');
-                    
-                    // Update active nav item
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show selected page
-                    pages.forEach(page => page.classList.remove('active'));
-                    document.querySelector(`.${pageId}`).classList.add('active');
-                });
-            });
-            
-            // Horizontal scroll for tokens with mouse wheel
-            const tokensContainer = document.getElementById('tokensContainer');
-            tokensContainer.addEventListener('wheel', function(e) {
-                if (e.deltaY !== 0) {
-                    e.preventDefault();
-                    this.scrollLeft += e.deltaY;
+            // Проверяем все возможные ответы
+            for (const [key, responses] of Object.entries(knowledgeBase)) {
+                if (userMessage.includes(key)) {
+                    const randomIndex = Math.floor(Math.random() * responses.length);
+                    return responses[randomIndex];
                 }
-            });
+            }
+            
+            // Если ничего не найдено, возвращаем ответ по умолчанию
+            const defaultResponses = knowledgeBase.default;
+            const randomIndex = Math.floor(Math.random() * defaultResponses.length);
+            return defaultResponses[randomIndex];
+        }
+
+        // Функция для отправки сообщения
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value;
+            
+            if (message.trim() === '') return;
+            
+            // Добавляем сообщение пользователя в чат
+            addMessageToChat(message, 'user');
+            
+            // Очищаем поле ввода
+            userInput.value = '';
+            
+            // Имитируем "думание" бота
+            setTimeout(() => {
+                const botResponse = getBotResponse(message);
+                addMessageToChat(botResponse, 'bot');
+            }, 500);
+        }
+
+        // Функция для добавления сообщения в чат
+        function addMessageToChat(message, sender) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            
+            messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+            messageElement.textContent = message;
+            
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Обработка нажатия Enter
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
+
+        // Приветственное сообщение
+        window.onload = function() {
+            setTimeout(() => {
+                addMessageToChat("Привет! Я простой ИИ чат-бот. Спроси меня что-нибудь!", 'bot');
+            }, 500);
+        };
     </script>
 </body>
 </html>
